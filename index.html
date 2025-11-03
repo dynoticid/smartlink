@@ -193,36 +193,4 @@ renderArtists();
 </script>
 
 </body>
-</html>    requestAnimationFrame(()=>li.classList.add('show'));
-  });
-
-  prevBtn.disabled = currentPage===1;
-  nextBtn.disabled = currentPage>=Math.ceil(filteredArtists.length/itemsPerPage);
-}
-
-// Search dengan debounce
-let searchTimeout;
-searchInput.addEventListener('input',()=>{
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(()=>{
-    const query = searchInput.value.toLowerCase();
-    filteredArtists = artists.filter(a=>a.toLowerCase().includes(query));
-    currentPage=1;
-    renderArtists();
-  },150);
-});
-
-// Pagination
-prevBtn.addEventListener('click',()=>{
-  if(currentPage>1){currentPage--;renderArtists();}
-});
-nextBtn.addEventListener('click',()=>{
-  if(currentPage<Math.ceil(filteredArtists.length/itemsPerPage)){currentPage++;renderArtists();}
-});
-
-// Render awal
-renderArtists();
-</script>
-
-</body>
 </html>
