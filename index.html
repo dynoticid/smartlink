@@ -50,31 +50,25 @@ footer{padding:15px 10px;font-size:0.85rem;color: rgba(255,255,255,0.6);text-ali
 let artists = [
 "ABIL Tramaker",
 "ALFIN FVNKY",
-"Arhaa",
 "Ayuz Fvnky",
 "Bngnil Porects",
 "Derill Nine",
 "Darna Fvnky",
-"Darna Gvndy",  // link khusus
-"DJ FEBRI DTM",
-"Evanias",
-"FajarFvnky",
+"Darna Gvnby",  // link khusus
+"FEBRI DTM",
 "Ganz Neverdie",
 "HAMXZTEEN",
-"Hery Fvnky",
 "Hndra SOPAN",
 "ILHAM RMX SG",
 "Ilham Sopan Rmx",
 "Itsme Ilham",
 "Itsmeards",
 "Iyanz`Wolf",
-"Malumbi",
 "Riski Sumatra",
 "Refan SFX",
 "Shraa NeverDIE",
 "SRVLR RMX",
 "SUKAPARTY",
-"Vallen Umbu",
 "XDYNZ",
 "ZANVIR",
 "ZallETM",
@@ -84,7 +78,6 @@ let artists = [
 "heyDarryl",
 "It'smefajar",
 "i5vR",
-"DJ Ryyuu"
 ];
 
 // Urutkan abjad
@@ -112,7 +105,7 @@ function renderArtists(){
   pageItems.forEach(name=>{
     const li = document.createElement('li');
     // Darna Gvndy link khusus
-    const link = name==="Darna Gvndy" ? "https://dynoticid.github.io/darnagvndylink/" : "https://dynoticid.github.io/home/";
+    const link = name==="Darna Gvnby" ? "https://dynoticid.github.io/darnagvndylink/" : "https://dynoticid.github.io/home/";
     li.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
     artistList.appendChild(li);
     requestAnimationFrame(()=>li.classList.add('show'));
