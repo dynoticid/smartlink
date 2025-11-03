@@ -46,14 +46,49 @@ footer{padding:15px 10px;font-size:0.85rem;color: rgba(255,255,255,0.6);text-ali
 <footer>© 2025 Dynotic ID</footer>
 
 <script>
-// Daftar artis
-const artists = [
-"Drilz","Arhaa","Itsmeards","Derill Nine","Hery Fvnky","Malumbi","Evanias","Vallen Umbu","XDYNZ","Shraa NeverDIE",
-"ALFIN FVNKY","Ganz Neverdie","Riski Sumatra","Refan SFX","Iyan Rmx","Darna Fvnky","FajarFvnky","ABIL Tramaker",
-"SRVLR RMX","Bngnil Porects","Hndra SOPAN","Ayuz Fvnky","i5vR","Huynh Trmaker","DJ FEBRI DTM","ZANVIR","ILHAM RMX SG",
-"Zanrmx","DJ Ryyuu","GifFari Rmx","Zan Fvnky Rmx","SUKAPARTY","HAMXZTEEN","It'smefajar","Ilham Sopan Rmx","Iyanz`Wolf",
-"Itsme Ilham","ZallETM"
+// Daftar artis dengan Darna Gvndy, gfrxP, heyDarryl ditambahkan
+let artists = [
+"ABIL Tramaker",
+"ALFIN FVNKY",
+"Arhaa",
+"Ayuz Fvnky",
+"Bngnil Porects",
+"Derill Nine",
+"Darna Fvnky",
+"Darna Gvndy",  // link khusus
+"DJ FEBRI DTM",
+"Evanias",
+"FajarFvnky",
+"Ganz Neverdie",
+"HAMXZTEEN",
+"Hery Fvnky",
+"Hndra SOPAN",
+"ILHAM RMX SG",
+"Ilham Sopan Rmx",
+"Itsme Ilham",
+"Itsmeards",
+"Iyanz`Wolf",
+"Malumbi",
+"Riski Sumatra",
+"Refan SFX",
+"Shraa NeverDIE",
+"SRVLR RMX",
+"SUKAPARTY",
+"Vallen Umbu",
+"XDYNZ",
+"ZANVIR",
+"ZallETM",
+"Zanrmx",
+"Zan Fvnky Rmx",
+"gfrxP",
+"heyDarryl",
+"It'smefajar",
+"i5vR",
+"DJ Ryyuu"
 ];
+
+// Urutkan abjad
+artists.sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
 
 const itemsPerPage = 10;
 let currentPage = 1;
@@ -76,8 +111,9 @@ function renderArtists(){
 
   pageItems.forEach(name=>{
     const li = document.createElement('li');
-    // arahkan ke home
-    li.innerHTML = `<a href="https://dynoticid.github.io/home/" target="_blank">${name}</a>`;
+    // Darna Gvndy link khusus
+    const link = name==="Darna Gvndy" ? "https://dynoticid.github.io/darnagvndylink/" : "https://dynoticid.github.io/home/";
+    li.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
     artistList.appendChild(li);
     requestAnimationFrame(()=>li.classList.add('show'));
   });
