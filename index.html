@@ -161,9 +161,12 @@ function renderArtists(){
     const li = document.createElement('li');
     // Link khusus
     let link = "https://dynoticid.github.io/home/";
-    if(name === "Darna Gvnby") link = "https://dynoticid.github.io/darnagvndylink/";
-    if(name === "ABIL Tramaker") link = "https://dynoticid.github.io/abilstarlink/";
-    if(name === "ALFIN FVNKY") link = "https://dynoticid.github.io/alfinsmartlink/";
+    // Link khusus
+let link = "https://dynoticid.github.io/home/";
+if(name === "Darna Gvnby") link = "https://dynoticid.github.io/darnagvndylink/";
+if(name === "ABIL Tramaker") link = "https://dynoticid.github.io/abilstarlink/";
+if(name === "ALFIN FVNKY") link = "https://dynoticid.github.io/alfinsmartlink/";
+if(name === "Ayuz Fvnky") link = "https://dynoticid.github.io/ayuzlink/";
     li.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
     artistList.appendChild(li);
   });
