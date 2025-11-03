@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynotic Artist Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"Outfit", sans-serif; }
+
+  html, body {
+    height:100%;
+    width:100%;
+    background: linear-gradient(160deg,#3b0764,#6d28d9,#7e22ce);
+    background-size:400% 400%;
+    animation: aurora 15s ease-in-out infinite;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    color:#f5f3ff;
+    overflow:hidden;
+  }
+
+  @keyframes aurora {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  h1 {
+    margin:25px 0 15px;
+    font-size:clamp(2rem,6vw,3rem);
+    text-align:center;
+    text-shadow:0 0 15px rgba(0,0,0,0.25);
+  }
+
+  .search-box {
+    width:90%;
+    max-width:420px;
+    border-radius:18px;
+    padding:12px 18px;
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 15px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+    margin-bottom:20px;
+  }
+
+  .search-box:focus-within {
+    background: rgba(255,255,255,0.12);
+    box-shadow:0 0 20px rgba(167,139,250,0.4);
+  }
+
+  .search-box input {
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:#fff;
+    font-size:1rem;
+    padding:8px 0;
+  }
+
+  ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+    width:90%;
+    max-width:420px;
+    overflow-y:auto;
+    flex-grow:1;
+  }
+
+  li {
+    margin-bottom:14px;
+    border-radius:16px;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    padding:16px 20px;
+    font-weight:600;
+    transition: all 0.3s ease, transform 0.3s ease;
+  }
+
+  li:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  }
+
+  li a {
+    color:#fff;
+    text-decoration:none;
+    display:block;
+  }
+
+  .no-result {
+    text-align:center;
+    margin-top:20px;
+    color:#f0a;
+    display:none;
+  }
+
+  footer {
+    padding:15px 10px;
+    font-size:0.85rem;
+    color: rgba(255,255,255,0.6);
+    text-align:center;
+  }
+
+  @media(max-width:500px){
+    .search-box, ul { max-width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Search Your Artist</h1>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Cari nama artis...">
+</div>
+
+<ul id="artistList"></ul>
+<p class="no-result" id="noResult">Artis tidak ditemukan.</p>
+
+<footer>© 2025 Dynotic ID</footer>
+
+<script>
+// List artis unik, semua sementara mengarah ke home
+const artists = [
+  "Drilz","Arhaa","Itsmeards","Derill Nine","Hery Fvnky",
+  "Malumbi","Evanias","Vallen Umbu","XDYNZ","Shraa NeverDIE",
+  "ALFIN FVNKY","Ganz Neverdie","Riski Sumatra","Refan SFX",
+  "Iyan Rmx","Darna Fvnky","FajarFvnky","ABIL Tramaker",
+  "SRVLR RMX","Bngnil Porects","Hndra SOPAN","Ayuz Fvnky",
+  "i5vR","Huynh Trmaker","DJ FEBRI DTM","ZANVIR","ILHAM RMX SG",
+  "Zanrmx","DJ Ryyuu","GifFari Rmx","Zan Fvnky Rmx","SUKAPARTY",
+  "HAMXZTEEN","It'smefajar","Ilham Sopan Rmx","Iyanz`Wolf",
+  "Itsme Ilham","ZallETM"
+];
+
+const searchInput = document.getElementById('searchInput');
+const artistList = document.getElementById('artistList');
+const noResult = document.getElementById('noResult');
+
+function renderArtists(filter){
+  artistList.innerHTML = '';
+  const filtered = artists.filter(name => name.toLowerCase().includes(filter.toLowerCase()));
+  
+  if(filtered.length === 0){
+    noResult.style.display='block';
+  } else {
+    noResult.style.display='none';
+    filtered.forEach(name=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="https://dynoticid.github.io/home/">${name}</a>`;
+      artistList.appendChild(li);
+    });
+  }
+}
+
+searchInput.addEventListener('input', ()=> renderArtists(searchInput.value));
+renderArtists('');
+</script>
+
+</body>
+</html>
