@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dynotic Smartlink</title>
+<title>Dynotic Artists</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Outfit",sans-serif;}
@@ -12,16 +12,18 @@ html,body{height:100%;width:100%;background:linear-gradient(160deg,#3b0764,#6d28
 h1{margin:25px 0;font-size:clamp(2rem,6vw,3rem);text-align:center;text-shadow:0 0 15px rgba(0,0,0,0.25);}
 .search-box{width:90%;max-width:420px;border-radius:18px;padding:12px 18px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(12px);box-shadow:0 0 15px rgba(0,0,0,0.25);margin-bottom:20px;transition:all 0.3s ease;}
 .search-box input{width:100%;border:none;outline:none;background:transparent;color:#fff;font-size:1rem;padding:8px 0;}
-.search-box:focus-within{background:rgba(255,255,255,0.18);box-shadow:0 0 20px rgba(167,139,250,0.4);}
 .list-container{width:90%;max-width:420px;flex-grow:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 ul{list-style:none;padding:0;margin:0;}
-li{height:50px;display:flex;align-items:center;padding:0 16px;border-radius:14px;backdrop-filter:blur(6px);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);font-weight:600;margin-bottom:8px;transition:all 0.25s ease;}
-li:hover{background:rgba(255,255,255,0.15);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.25);}
+li{height:50px;display:flex;align-items:center;padding:0 16px;border-radius:14px;backdrop-filter:blur(6px);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);font-weight:600;margin-bottom:8px;transition:all 0.25s ease;opacity:0;transform:translateY(10px);}
+li.show{opacity:1;transform:translateY(0);}
 li a{text-decoration:none;color:#fff;width:100%;display:block;}
 li mark{background:rgba(196,181,253,0.5);border-radius:4px;color:#fff;}
 .no-result{text-align:center;margin-top:20px;color:#f0a;display:none;}
+.pagination{display:flex;gap:10px;margin:15px 0;}
+.pagination button{padding:8px 14px;border:none;border-radius:8px;background:rgba(255,255,255,0.12);color:#fff;cursor:pointer;font-weight:600;transition:all 0.25s ease;}
+.pagination button:hover{background:rgba(255,255,255,0.25);}
+.pagination button:disabled{opacity:0.4;cursor:not-allowed;}
 footer{padding:15px 10px;font-size:0.85rem;color: rgba(255,255,255,0.6);text-align:center;}
-@media(max-width:500px){.search-box,.list-container{max-width:100%;}}
 </style>
 </head>
 <body>
@@ -36,10 +38,15 @@ footer{padding:15px 10px;font-size:0.85rem;color: rgba(255,255,255,0.6);text-ali
 </div>
 <p class="no-result" id="noResult">Artis tidak ditemukan.</p>
 
+<div class="pagination">
+  <button id="prevBtn">Previous</button>
+  <button id="nextBtn">Next</button>
+</div>
+
 <footer>© 2025 Dynotic ID</footer>
 
 <script>
-// Daftar artis unik
+// Daftar artis
 const artists = [
 "Drilz","Arhaa","Itsmeards","Derill Nine","Hery Fvnky","Malumbi","Evanias","Vallen Umbu","XDYNZ","Shraa NeverDIE",
 "ALFIN FVNKY","Ganz Neverdie","Riski Sumatra","Refan SFX","Iyan Rmx","Darna Fvnky","FajarFvnky","ABIL Tramaker",
@@ -48,28 +55,59 @@ const artists = [
 "Itsme Ilham","ZallETM"
 ];
 
-const searchInput = document.getElementById('searchInput');
+const itemsPerPage = 10;
+let currentPage = 1;
+let filteredArtists = [...artists];
+
 const artistList = document.getElementById('artistList');
+const searchInput = document.getElementById('searchInput');
 const noResult = document.getElementById('noResult');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
-function renderList(filter='') {
-  artistList.innerHTML='';
-  const filtered = artists.filter(a=>a.toLowerCase().includes(filter.toLowerCase()));
-  if(filtered.length===0){ noResult.style.display='block'; return; } else { noResult.style.display='none'; }
+// Render artis per page
+function renderArtists(){
+  artistList.innerHTML = '';
+  const start = (currentPage-1)*itemsPerPage;
+  const end = start + itemsPerPage;
+  const pageItems = filteredArtists.slice(start,end);
 
-  filtered.forEach(name=>{
-    const li=document.createElement('li');
-    const regex = new RegExp(`(${filter})`,'gi');
-    const displayName = name.replace(regex,'<mark>$1</mark>');
-    li.innerHTML=`<a href="https://dynoticid.github.io/home/">${displayName}</a>`;
+  if(pageItems.length===0){ noResult.style.display='block'; } else { noResult.style.display='none'; }
+
+  pageItems.forEach(name=>{
+    const li = document.createElement('li');
+    // arahkan ke home
+    li.innerHTML = `<a href="https://dynoticid.github.io/home/" target="_blank">${name}</a>`;
     artistList.appendChild(li);
+    requestAnimationFrame(()=>li.classList.add('show'));
   });
+
+  prevBtn.disabled = currentPage===1;
+  nextBtn.disabled = currentPage>=Math.ceil(filteredArtists.length/itemsPerPage);
 }
 
-// Render awal
-renderList();
+// Search dengan debounce
+let searchTimeout;
+searchInput.addEventListener('input',()=>{
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(()=>{
+    const query = searchInput.value.toLowerCase();
+    filteredArtists = artists.filter(a=>a.toLowerCase().includes(query));
+    currentPage=1;
+    renderArtists();
+  },150);
+});
 
-searchInput.addEventListener('input',()=>{ renderList(searchInput.value); });
+// Pagination
+prevBtn.addEventListener('click',()=>{
+  if(currentPage>1){currentPage--;renderArtists();}
+});
+nextBtn.addEventListener('click',()=>{
+  if(currentPage<Math.ceil(filteredArtists.length/itemsPerPage)){currentPage++;renderArtists();}
+});
+
+// Render awal
+renderArtists();
 </script>
 
 </body>
