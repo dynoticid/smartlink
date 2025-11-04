@@ -259,6 +259,12 @@ nextBtn.addEventListener('click',()=>{
   if(currentPage<Math.ceil(filteredArtists.length/itemsPerPage)){currentPage++;renderArtists();}
 });
 
+// Sembunyikan loading saat halaman dimuat atau user kembali
+window.addEventListener('pageshow', () => {
+  loadingAnime.style.opacity = '0';
+  loadingAnime.style.pointerEvents = 'none';
+});
+
 renderArtists();
 </script>
 </body>
