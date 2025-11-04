@@ -78,8 +78,6 @@ li mark{
   color:#f0a;
   display:none;
 }
-
-/* Pagination ala Alfin Fvnky */
 .pagination{
   display:flex;
   justify-content:center;
@@ -110,16 +108,42 @@ li mark{
   background: rgba(255,255,255,0.1);
   box-shadow: none;
 }
-
 footer{
   padding:15px 10px;
   font-size:0.85rem;
   color: rgba(255,255,255,0.6);
   text-align:center;
 }
+
+/* Loading Anime GIF */
+#loadingAnime{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.7);
+  display:flex;justify-content:center;align-items:center;
+  flex-direction:column;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.4s ease;
+}
+#loadingAnime img{
+  width:150px;
+  height:150px;
+  margin-bottom:15px;
+}
+#loadingAnime span{
+  font-size:1.5rem;
+  color:#fff;
+  font-weight:700;
+}
 </style>
 </head>
 <body>
+
+<div id="loadingAnime">
+  <img src="https://i.imgur.com/897ShGy.gif" alt="Anime Joget">
+  <span>Loading...</span>
+</div>
 
 <h1>Search Your Artist</h1>
 <div class="search-box">
@@ -147,7 +171,6 @@ let artists = [
 "SUKAPARTY","XDYNZ","ZANVIR","ZallETM","Zanrmx","Zan Fvnky Rmx","gfrxP",
 "heyDarryl","It'smefajar","i5vR Rmx"
 ];
-
 artists.sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
 
 const itemsPerPage = 10;
@@ -159,62 +182,71 @@ const searchInput = document.getElementById('searchInput');
 const noResult = document.getElementById('noResult');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
+const loadingAnime = document.getElementById('loadingAnime');
 
 function renderArtists(){
   artistList.innerHTML = '';
   const start = (currentPage-1)*itemsPerPage;
   const end = start + itemsPerPage;
   const pageItems = filteredArtists.slice(start,end);
-
-  noResult.style.display = pageItems.length===0 ? 'block' : 'none';
+  noResult.style.display = pageItems.length===0?'block':'none';
 
   pageItems.forEach(name=>{
     const li = document.createElement('li');
-    // Link khusus
-    let link = "https://dynoticid.github.io/home/";
-    if(name === "Darna Gvnby") link = "https://dynoticid.github.io/darnagvndylink/";
-    if(name === "ABIL Tramaker") link = "https://dynoticid.github.io/abilstarlink/";
-    if(name === "ALFIN FVNKY") link = "https://dynoticid.github.io/alfinsmartlink/";
-    if(name === "Ayuz Fvnky") link = "https://dynoticid.github.io/ayuzlink/";
-    if(name === "Bngnil Porects") link = "https://dynoticid.github.io/bgnillink/";
-    if(name === "Darna Fvnky") link = "https://dynoticid.github.io/darnalink/";
-    if(name === "Derill Nine") link = "https://dynoticid.github.io/derill9/";
-    if(name === "Febri DTM") link = "https://dynoticid.github.io/febridtm/";
-    if(name === "Ganz Neverdie") link = "https://dynoticid.github.io/ganzlink/";
-    if(name === "gfrxP") link = "https://dynoticid.github.io/gfrxPlink/";
-    if(name === "HAMX7TEEN") link = "https://dynoticid.github.io/hamxlink/";
-    if(name === "heyDarryl") link = "https://dynoticid.github.io/heylink/";
-    if(name === "Hndra SOPAN") link = "https://dynoticid.github.io/hndralink/";
-    if(name === "Fany Carsello") link = "https://dynoticid.github.io/fanylink/";
-    if(name === "i5vR Rmx") link = "https://dynoticid.github.io/i5link/";
-    if(name === "ILHAM RMX SG") link = "https://dynoticid.github.io/hamsg/";
-    if(name === "Ilham Sopan Rmx") link = "https://dynoticid.github.io/hamspn/";
-    if(name === "Ihzan Sopan") link = "https://dynoticid.github.io/ihznlink/";
-    if(name === "It'smefajar") link = "https://dynoticid.github.io/itslink/";
-    if(name === "Itsme Ilham") link = "https://dynoticid.github.io/ihamlink/";
-    if(name === "Iyanz`Wolf") link = "https://dynoticid.github.io/yanlink/";
-    if(name === "Shraa NeverDIE") link = "https://dynoticid.github.io/shralink/";
-    if(name === "SRVLR RMX") link = "https://dynoticid.github.io/srlink/";
-    if(name === "SUKAPARTY") link = "https://dynoticid.github.io/sukalink/";
-    if(name === "XDYNZ") link = "https://dynoticid.github.io/xdlink/";
-    if(name === "ZallETM") link = "https://dynoticid.github.io/zalink/";
-    if(name === "Zan Fvnky Rmx") link = "https://dynoticid.github.io/zanlink/";
-    if(name === "Zanrmx") link = "https://dynoticid.github.io/zan2link/";
-    if(name === "ZANVIR") link = "https://dynoticid.github.io/zan3link/";
-    li.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
+    let link="https://dynoticid.github.io/home/";
+    if(name==="Darna Gvnby") link="https://dynoticid.github.io/darnagvndylink/";
+    if(name==="ABIL Tramaker") link="https://dynoticid.github.io/abilstarlink/";
+    if(name==="ALFIN FVNKY") link="https://dynoticid.github.io/alfinsmartlink/";
+    if(name==="Ayuz Fvnky") link="https://dynoticid.github.io/ayuzlink/";
+    if(name==="Bngnil Porects") link="https://dynoticid.github.io/bgnillink/";
+    if(name==="Darna Fvnky") link="https://dynoticid.github.io/darnalink/";
+    if(name==="Derill Nine") link="https://dynoticid.github.io/derill9/";
+    if(name==="Febri DTM") link="https://dynoticid.github.io/febridtm/";
+    if(name==="Ganz Neverdie") link="https://dynoticid.github.io/ganzlink/";
+    if(name==="gfrxP") link="https://dynoticid.github.io/gfrxPlink/";
+    if(name==="HAMX7TEEN") link="https://dynoticid.github.io/hamxlink/";
+    if(name==="heyDarryl") link="https://dynoticid.github.io/heylink/";
+    if(name==="Hndra SOPAN") link="https://dynoticid.github.io/hndralink/";
+    if(name==="Fany Carsello") link="https://dynoticid.github.io/fanylink/";
+    if(name==="i5vR Rmx") link="https://dynoticid.github.io/i5link/";
+    if(name==="ILHAM RMX SG") link="https://dynoticid.github.io/hamsg/";
+    if(name==="Ilham Sopan Rmx") link="https://dynoticid.github.io/hamspn/";
+    if(name==="Ihzan Sopan") link="https://dynoticid.github.io/ihznlink/";
+    if(name==="It'smefajar") link="https://dynoticid.github.io/itslink/";
+    if(name==="Itsme Ilham") link="https://dynoticid.github.io/ihamlink/";
+    if(name==="Iyanz`Wolf") link="https://dynoticid.github.io/yanlink/";
+    if(name==="Shraa NeverDIE") link="https://dynoticid.github.io/shralink/";
+    if(name==="SRVLR RMX") link="https://dynoticid.github.io/srlink/";
+    if(name==="SUKAPARTY") link="https://dynoticid.github.io/sukalink/";
+    if(name==="XDYNZ") link="https://dynoticid.github.io/xdlink/";
+    if(name==="ZallETM") link="https://dynoticid.github.io/zalink/";
+    if(name==="Zan Fvnky Rmx") link="https://dynoticid.github.io/zanlink/";
+    if(name==="Zanrmx") link="https://dynoticid.github.io/zan2link/";
+    if(name==="ZANVIR") link="https://dynoticid.github.io/zan3link/";
+
+    const a=document.createElement('a');
+    a.textContent=name;
+    a.href=link;
+    a.addEventListener('click',(e)=>{
+      e.preventDefault();
+      loadingAnime.style.opacity='1';
+      loadingAnime.style.pointerEvents='all';
+      setTimeout(()=>{window.location.href=link;},700);
+    });
+    li.appendChild(a);
     artistList.appendChild(li);
   });
 
-  prevBtn.disabled = currentPage===1;
-  nextBtn.disabled = currentPage>=Math.ceil(filteredArtists.length/itemsPerPage);
+  prevBtn.disabled=currentPage===1;
+  nextBtn.disabled=currentPage>=Math.ceil(filteredArtists.length/itemsPerPage);
 }
 
 let searchTimeout;
 searchInput.addEventListener('input',()=>{
   clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(()=>{
-    const query = searchInput.value.toLowerCase();
-    filteredArtists = artists.filter(a=>a.toLowerCase().includes(query));
+  searchTimeout=setTimeout(()=>{
+    const query=searchInput.value.toLowerCase();
+    filteredArtists=artists.filter(a=>a.toLowerCase().includes(query));
     currentPage=1;
     renderArtists();
   },150);
@@ -229,6 +261,5 @@ nextBtn.addEventListener('click',()=>{
 
 renderArtists();
 </script>
-
 </body>
 </html>
